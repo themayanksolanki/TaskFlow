@@ -58,16 +58,16 @@
                   </span>
                 </td>
                 <td (click)="$event.stopPropagation()">
-                  @if (isManager && task.assignedTo?.username) {
+                  @if (isManager && task.assignedTo.username) {
                     <span class="assignee-link" (click)="openReassign(task._id)" title="Click to reassign">
-                      {{ task.assignedTo?.username }}
+                      {{ task.assignedTo.username }}
                     </span>
                   } @else {
-                    <span class="text-muted-em">{{ task.assignedTo?.username || '—' }}</span>
+                    <span class="text-muted-em">{{ task.assignedTo.username || '—' }}</span>
                   }
                 </td>
                 <td>
-                  <span class="text-muted-em">{{ task.createdBy?.username || '—' }}</span>
+                  <span class="text-muted-em">{{ task.createdBy.username || '—' }}</span>
                 </td>
                 <td class="pe-4 text-end" (click)="$event.stopPropagation()">
                   <div class="d-flex gap-1 justify-content-end">
@@ -252,18 +252,18 @@
           <div class="detail-meta-cell">
             <span class="detail-meta-label"><i class="bi bi-person-fill me-1"></i>Assigned To</span>
             <span class="detail-meta-val">
-              @if (selectedTask.assignedTo?.username) {
-                <span class="meta-pip meta-pip-blue">{{ selectedTask.assignedTo?.username?.[0]?.toUpperCase() }}</span>
-                {{ selectedTask.assignedTo?.username }}
+              @if (selectedTask.assignedTo.username) {
+                <span class="meta-pip meta-pip-blue">{{ (selectedTask.assignedTo.username[0] || 'U').toUpperCase() }}</span>
+                {{ selectedTask.assignedTo.username }}
               } @else { <span class="text-muted">—</span> }
             </span>
           </div>
           <div class="detail-meta-cell">
             <span class="detail-meta-label"><i class="bi bi-person-workspace me-1"></i>Created By</span>
             <span class="detail-meta-val">
-              @if (selectedTask.createdBy?.username) {
-                <span class="meta-pip meta-pip-purple">{{ selectedTask.createdBy?.username?.[0]?.toUpperCase() }}</span>
-                {{ selectedTask.createdBy?.username }}
+              @if (selectedTask.createdBy.username) {
+                <span class="meta-pip meta-pip-purple">{{ (selectedTask.createdBy.username[0] || 'U').toUpperCase() }}</span>
+                {{ selectedTask.createdBy.username }}
               } @else { <span class="text-muted">—</span> }
             </span>
           </div>

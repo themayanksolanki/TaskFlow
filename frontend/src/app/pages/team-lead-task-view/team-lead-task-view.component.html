@@ -53,7 +53,7 @@
                   {{ task.status }}
                 </span>
               </td>
-              <td class="align-middle">{{ task.assignedTo?.username }}</td>
+              <td class="align-middle">{{ task.assignedTo.username }}</td>
               <td class="align-middle">
                 <a [routerLink]="['/tasks', task._id, 'edit']" class="btn btn-sm btn-light">Edit</a>
               </td>
