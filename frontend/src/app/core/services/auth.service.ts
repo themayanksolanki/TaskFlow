@@ -15,25 +15,43 @@ export interface RegisterResponse {
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly api = `${environment.apiUrl}/auth`;
-  private readonly TOKEN_KEY = 'token';
   private readonly USER_KEY = 'user';
+  private readonly CREDS = { withCredentials: true };
 
+  private accessToken = signal<string | null>(null);
   currentUser = signal<User | null>(this.loadUser());
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+  ) {}
 
-  register(payload: { username: string; email: string; password: string; role: string; referenceEmail?: string }) {
-    return this.http.post<RegisterResponse>(`${this.api}/register`, payload).pipe(
-      tap((res) => {
-        if (res.token && res.user) this.persist(res as AuthResponse);
-      })
-    );
+  register(payload: {
+    username: string;
+    email: string;
+    password: string;
+    role: string;
+    referenceEmail?: string;
+  }) {
+    return this.http
+      .post<RegisterResponse>(`${this.api}/register`, payload, this.CREDS)
+      .pipe(
+        tap((res) => {
+          if (res.token && res.user) this.persist(res as AuthResponse);
+        }),
+      );
   }
 
   login(email: string, password: string) {
-    return this.http.post<AuthResponse>(`${this.api}/login`, { email, password }).pipe(
-      tap((res) => this.persist(res))
-    );
+    return this.http
+      .post<AuthResponse>(`${this.api}/login`, { email, password }, this.CREDS)
+      .pipe(tap((res) => this.persist(res)));
+  }
+
+  refresh() {
+    return this.http
+      .post<AuthResponse>(`${this.api}/refresh`, {}, this.CREDS)
+      .pipe(tap((res) => this.persist(res)));
   }
 
   getMe() {
@@ -41,18 +59,18 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.removeItem(this.TOKEN_KEY);
-    localStorage.removeItem(this.USER_KEY);
-    this.currentUser.set(null);
-    this.router.navigate(['/login']);
+    this.http.post(`${this.api}/logout`, {}, this.CREDS).subscribe({
+      complete: () => this.clearSession(),
+      error: () => this.clearSession(),
+    });
   }
 
   isLoggedIn(): boolean {
-    return !!this.getToken();
+    return !!this.accessToken();
   }
 
   getToken(): string | null {
-    return localStorage.getItem(this.TOKEN_KEY);
+    return this.accessToken();
   }
 
   getUser(): User | null {
@@ -60,9 +78,16 @@ export class AuthService {
   }
 
   private persist(res: AuthResponse) {
-    localStorage.setItem(this.TOKEN_KEY, res.token);
+    this.accessToken.set(res.token);
     localStorage.setItem(this.USER_KEY, JSON.stringify(res.user));
     this.currentUser.set(res.user);
+  }
+
+  clearSession() {
+    this.accessToken.set(null);
+    localStorage.removeItem(this.USER_KEY);
+    this.currentUser.set(null);
+    this.router.navigate(['/login']);
   }
 
   private loadUser(): User | null {

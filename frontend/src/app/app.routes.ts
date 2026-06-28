@@ -30,7 +30,7 @@ export const routes: Routes = [
   {
     path: 'users',
     canActivate: [authGuard, roleGuard],
-    data: { roles: ['Manager'] },
+    data: { roles: ['Manager', 'Team Lead'] },
     loadComponent: () => import('./pages/user-list/user-list.component').then((m) => m.UserListComponent),
   },
   {
@@ -42,4 +42,8 @@ export const routes: Routes = [
         (m) => m.TeamLeadTaskViewComponent
       ),
   },
+  {
+    path: '**',
+    redirectTo: 'dashboard',
+  }
 ];

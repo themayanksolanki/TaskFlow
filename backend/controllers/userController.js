@@ -55,7 +55,6 @@ export const activateUser = async (req, res, next) => {
   try {
     const target = await User.findById(req.params.id);
     if (!target) return next(new AppError('User not found', 404));
-    if (target.isActive) return next(new AppError('User is already active', 400));
 
     const currentRole = req.user.role;
     const targetRole = target.role;
