@@ -79,3 +79,61 @@
 .empty-state i {
   color: #cbd5e1;
 }
+
+/* ── Pending row highlight ── */
+.pending-row {
+  background: #fffbeb;
+}
+
+.pending-row:hover {
+  background: #fef3c7 !important;
+}
+
+/* ── Status badges ── */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 99px;
+}
+
+.status-active  { background: #dcfce7; color: #15803d; }
+.status-pending { background: #fef9c3; color: #a16207; }
+
+/* ── Pending count chip in subtitle ── */
+.badge-pending-count {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 99px;
+  background: #fef9c3;
+  color: #a16207;
+}
+
+/* ── Activate button ── */
+.btn-activate {
+  background: #f0fdf4;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 8px;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+}
+
+.btn-activate:hover:not(:disabled) {
+  background: #15803d;
+  color: #fff;
+  border-color: #15803d;
+}
+
+.btn-activate:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

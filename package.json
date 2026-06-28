@@ -13,6 +13,8 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "concurrently": "^10.0.3"
+    "concurrently": "^10.0.3",
+    "express-rate-limit": "^8.5.2",
+    "helmet": "^8.2.0"
   }
 }
